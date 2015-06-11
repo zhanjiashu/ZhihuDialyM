@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">知乎日报</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="activity_main">首页</string>
+    <string name="activity_settings">偏好设置</string>
+    <string name="empty"> </string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_detail">DetailActivity</string>
+    <string name="action_collect">收藏</string>
+    <string name="title_activity_new_main">NewMainActivity</string>
+    <string name="user_name">userName</string>
+    <string name="title_activity_main2">Main2Activity</string>
+
+</resources>

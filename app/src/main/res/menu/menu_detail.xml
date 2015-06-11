@@ -1,0 +1,12 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto"
+      xmlns:tools="http://schemas.android.com/tools"
+      tools:context="io.gitcafe.zhanjiashu.newzhihudialy.ui.activity.DetailActivity">
+
+    <item
+        android:id="@+id/action_star"
+        android:title="@string/action_collect"
+        android:icon="@drawable/ic_action_star"
+        android:orderInCategory="80"
+        app:showAsAction="always"/>
+</menu>

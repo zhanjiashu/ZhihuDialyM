@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="material_colorPrimaryDark">#1976D2</color>
+    <color name="material_colorPrimary">#2196F3</color>
+    <color name="material_textColorPrimary">#FFFFFF</color>
+    <color name="material_textColorSecondary">#727272</color>
+    <color name="material_colorAccent">#536DFE</color>
+    <color name="material_textColor">#212121</color>
+    <color name="material_dividerColor">#B6B6B6</color>
+    <color name="material_colorPrimaryLight">#BBDEFB</color>
+
+    <color name="text_enabled">#FFFFFFFF</color>
+    <color name="text_disabled">#70FFFFFF</color>
+
+    <color name="material_item_activited">#70B6B6B6</color>
+
+    <color name="transparent">@android:color/transparent</color>
+</resources>
