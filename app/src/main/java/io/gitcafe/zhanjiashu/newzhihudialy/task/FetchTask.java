@@ -2,6 +2,7 @@ package io.gitcafe.zhanjiashu.newzhihudialy.task;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -23,7 +24,7 @@ import io.gitcafe.zhanjiashu.newzhihudialy.util.VolleyUtils;
  * Created by Jiashu on 2015/6/2.
  */
 public abstract class FetchTask<T> {
-    private final String TAG = getClass().getSimpleName();
+    private final String TAG = "FetchTask";
     private String mUrl;
     private boolean mFetchFromNetwork;
 
@@ -59,7 +60,6 @@ public abstract class FetchTask<T> {
     }
 
     private void fetchFromNetwork(String url, final FetchCallback<T> callback) {
-        LogUtil.d(TAG, url);
         mRequest = new StringRequest(
                 url,
                 new Response.Listener<String>() {

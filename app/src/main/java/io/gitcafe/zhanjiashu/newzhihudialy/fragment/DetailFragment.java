@@ -1,8 +1,7 @@
-package io.gitcafe.zhanjiashu.newzhihudialy.ui.fragment;
+package io.gitcafe.zhanjiashu.newzhihudialy.fragment;
 
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
@@ -14,9 +13,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -25,6 +25,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -41,7 +42,7 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import io.gitcafe.zhanjiashu.newzhihudialy.R;
-import io.gitcafe.zhanjiashu.newzhihudialy.adapter.AvatarsRcvAdapter;
+import io.gitcafe.zhanjiashu.newzhihudialy.adapter.AvatarsAdapter;
 import io.gitcafe.zhanjiashu.newzhihudialy.common.ZHLinearLayout;
 import io.gitcafe.zhanjiashu.newzhihudialy.model.MemberEntity;
 import io.gitcafe.zhanjiashu.newzhihudialy.model.StoryDetailEntity;
@@ -61,7 +62,7 @@ public class DetailFragment extends Fragment {
     @InjectView(R.id.collapsing_toolbar)
     CollapsingToolbarLayout mToolbarLayout;
 
-    @InjectView(R.id.tool_bar)
+    @InjectView(R.id.toolbar)
     Toolbar mToolbar;
 
     @InjectView(R.id.iv_top)
@@ -86,6 +87,14 @@ public class DetailFragment extends Fragment {
 
     private TypedArray mActionbarSizeTypedArray;
 
+    public static DetailFragment newInstance(int storyId) {
+        Bundle args = new Bundle();
+        args.putInt(KEY_STORY_ID, storyId);
+        DetailFragment fragment = new DetailFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -101,31 +110,6 @@ public class DetailFragment extends Fragment {
         setupView();
 
         return view;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        mImageOptions = new DisplayImageOptions.Builder()
-                .cacheInMemory(false)
-                .cacheOnDisk(true)
-                .bitmapConfig(Bitmap.Config.RGB_565)
-                .build();
-
-        Bundle arguments = getArguments();
-        if (arguments != null) {
-            int storyId = arguments.getInt(KEY_STORY_ID);
-            FetchDetailTask task= new FetchDetailTask(getActivity(), storyId, false);
-            task.execute(new FetchTask.FetchCallback<StoryDetailEntity>() {
-                @Override
-                public void onFetchResponse(StoryDetailEntity storyDetailEntity) {
-                    showStoryDetail(storyDetailEntity);
-                }
-            });
-        }
-
-        mActionbarSizeTypedArray.recycle();
     }
 
     private void setupView() {
@@ -146,6 +130,26 @@ public class DetailFragment extends Fragment {
         }
 
         intiNestedScrollView();
+
+        mImageOptions = new DisplayImageOptions.Builder()
+                .cacheInMemory(false)
+                .cacheOnDisk(true)
+                .bitmapConfig(Bitmap.Config.RGB_565)
+                .build();
+
+        Bundle arguments = getArguments();
+        if (arguments != null) {
+            int storyId = arguments.getInt(KEY_STORY_ID);
+            FetchDetailTask task= new FetchDetailTask(getActivity(), storyId, false);
+            task.execute(new FetchTask.FetchCallback<StoryDetailEntity>() {
+                @Override
+                public void onFetchResponse(StoryDetailEntity storyDetailEntity) {
+                    showStoryDetail(storyDetailEntity);
+                }
+            });
+        }
+
+        mActionbarSizeTypedArray.recycle();
     }
 
     /**
@@ -191,15 +195,31 @@ public class DetailFragment extends Fragment {
                     }
                 });
 
-                mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(avatarList.size(), StaggeredGridLayoutManager.VERTICAL));
-                AvatarsRcvAdapter adapter = new AvatarsRcvAdapter(getActivity(), avatarList);
+                //mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(avatarList.size(), StaggeredGridLayoutManager.VERTICAL));
+                LinearLayoutManager manager = new LinearLayoutManager(getActivity());
+                manager.setOrientation(LinearLayoutManager.HORIZONTAL);
+                mRecyclerView.setLayoutManager(manager);
+
+                AvatarsAdapter adapter = new AvatarsAdapter(getActivity(), avatarList);
                 mRecyclerView.setAdapter(adapter);
             }
         }
 
-        String html = formatHtml(entity.getCss(), entity.getBody());
+        String contentBody = entity.getBody();
+        if (!TextUtils.isEmpty(contentBody)) {
+            String html = formatHtml(entity.getCss(), entity.getBody());
 
-        mWebView.loadDataWithBaseURL(null, html, "text/html", "utf-8", null);
+            mWebView.loadDataWithBaseURL(null, html, "text/html", "utf-8", null);
+        } else {
+            mWebView.setWebViewClient(new WebViewClient() {
+                @Override
+                public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                    view.loadUrl(url);
+                    return true;
+                }
+            });
+            mWebView.loadUrl(entity.getShare_url());
+        }
 
         mShareBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -261,6 +281,12 @@ public class DetailFragment extends Fragment {
         int id = item.getItemId();
         if (id == android.R.id.home) {
             getActivity().finish();
+            return true;
+        }
+
+        if (id == R.id.action_star) {
+            shareText(getActivity(), "");
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -271,7 +297,7 @@ public class DetailFragment extends Fragment {
         intent.setType("text/plain");
         intent.putExtra(Intent.EXTRA_TEXT,
                 shareText);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         activity.startActivity(Intent.createChooser(intent, activity.getResources().getString(R
                 .string.app_name)));
     }

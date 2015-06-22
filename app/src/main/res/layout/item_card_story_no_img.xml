@@ -5,14 +5,17 @@
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
     app:cardCornerRadius="4dp"
-    app:cardElevation="2dp">
+    app:cardElevation="2dp"
+    android:clickable="true"
+    android:foreground="?android:attr/selectableItemBackground"
+    app:contentPadding="12dp"
+    android:id="@+id/cv_card">
 
     <TextView
-        android:padding="12dp"
         android:id="@+id/tv_story_title"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:minHeight="80dp"
+        android:minHeight="50dp"
         android:gravity="center_vertical"
         android:textSize="18sp"
         android:textColor="@color/material_textColor"

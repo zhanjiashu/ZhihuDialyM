@@ -1,4 +1,4 @@
-package io.gitcafe.zhanjiashu.newzhihudialy.ui.fragment;
+package io.gitcafe.zhanjiashu.newzhihudialy.fragment;
 
 
 import android.os.Bundle;
@@ -8,6 +8,7 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.support.design.widget.Snackbar;
 import android.view.View;
+import android.webkit.WebView;
 
 import com.jakewharton.disklrucache.DiskLruCache;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -76,6 +77,7 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
         try {
             ImageLoader.getInstance().getDiskCache().clear();
             mFilesDiskLruCache.delete();
+            new WebView(getActivity()).clearCache(true);
             mClearCachePref.setSummary("缓存大小：0.00 M");
         } catch (IOException e) {
             e.printStackTrace();

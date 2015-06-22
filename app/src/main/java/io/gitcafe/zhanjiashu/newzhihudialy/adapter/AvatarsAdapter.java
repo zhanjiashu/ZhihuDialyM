@@ -6,33 +6,25 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+import io.gitcafe.zhanjiashu.common.BaseRcvAdapter;
 import io.gitcafe.zhanjiashu.newzhihudialy.R;
-import io.gitcafe.zhanjiashu.newzhihudialy.common.CircleBitmapDisplayer;
 
 /**
- * Created by Jiashu on 2015/6/5.
+ * Created by Jiashu on 2015/6/18.
  */
-public class AvatarsRcvAdapter extends RecyclerView.Adapter<AvatarsRcvAdapter.AvatarViewHolder> {
+public class AvatarsAdapter extends BaseRcvAdapter<String> {
 
-    private final Context mContext;
-    private final LayoutInflater mLayoutInflater;
     private final DisplayImageOptions mDisplayImageOptions;
 
-    private List<String> mAvatarList;
-
-    public AvatarsRcvAdapter(Context context, List<String> avatarList) {
-        mContext = context;
-        mLayoutInflater = LayoutInflater.from(context);
-
-        mAvatarList = avatarList;
+    public AvatarsAdapter(Context context, List<String> data) {
+        super(context, data);
 
         mDisplayImageOptions = new DisplayImageOptions.Builder()
                 .showImageOnLoading(R.drawable.editor_profile_avatar)
@@ -40,32 +32,32 @@ public class AvatarsRcvAdapter extends RecyclerView.Adapter<AvatarsRcvAdapter.Av
                 .cacheInMemory(false)
                 .cacheOnDisk(true)
                 .bitmapConfig(Bitmap.Config.RGB_565)
-                .displayer(new CircleBitmapDisplayer())
                 .build();
     }
 
     @Override
-    public AvatarViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    protected RecyclerView.ViewHolder onCreateAdapterViewHolder(LayoutInflater inflater, ViewGroup parent, int viewType) {
         return new AvatarViewHolder(mLayoutInflater.inflate(R.layout.item_image, parent, false));
     }
 
     @Override
-    public void onBindViewHolder(AvatarViewHolder holder, int position) {
-        ImageLoader.getInstance().displayImage(mAvatarList.get(position), holder.mAvatarView, mDisplayImageOptions);
+    protected void onBindAdapterViewHolder(RecyclerView.ViewHolder holder, int position, String str) {
+        AvatarViewHolder avatarViewHolder = (AvatarViewHolder) holder;
+        ImageLoader.getInstance().displayImage(str, avatarViewHolder.mAvatarView, mDisplayImageOptions);
     }
 
     @Override
-    public int getItemCount() {
-        return mAvatarList.size();
+    protected int getAdapterItemViewType(int position, String s) {
+        return 0;
     }
 
     static class AvatarViewHolder extends RecyclerView.ViewHolder {
 
-        ImageView mAvatarView;
+        CircleImageView mAvatarView;
 
         public AvatarViewHolder(View itemView) {
             super(itemView);
-            mAvatarView = (ImageView) itemView.findViewById(R.id.iv_avatar);
+            mAvatarView = (CircleImageView) itemView.findViewById(R.id.iv_avatar);
         }
     }
 }

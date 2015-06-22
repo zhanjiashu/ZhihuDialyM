@@ -1,4 +1,4 @@
-package io.gitcafe.zhanjiashu.newzhihudialy.ui.fragment;
+package io.gitcafe.zhanjiashu.newzhihudialy.fragment;
 
 
 import android.app.Activity;
@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -17,15 +18,15 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
+import io.gitcafe.zhanjiashu.common.BaseRcvAdapter;
 import io.gitcafe.zhanjiashu.newzhihudialy.R;
-import io.gitcafe.zhanjiashu.newzhihudialy.adapter.StoriesRcvAdapter;
+import io.gitcafe.zhanjiashu.newzhihudialy.adapter.StoriesAdapter;
 import io.gitcafe.zhanjiashu.newzhihudialy.model.DialyEntity;
 import io.gitcafe.zhanjiashu.newzhihudialy.model.StoryEntity;
 import io.gitcafe.zhanjiashu.newzhihudialy.task.FetchDialyTask;
 import io.gitcafe.zhanjiashu.newzhihudialy.task.FetchLatestDialyTask;
 import io.gitcafe.zhanjiashu.newzhihudialy.task.FetchTask;
-import io.gitcafe.zhanjiashu.newzhihudialy.ui.activity.DetailActivity;
-import io.gitcafe.zhanjiashu.newzhihudialy.util.LogUtil;
+import io.gitcafe.zhanjiashu.newzhihudialy.activity.DetailActivity;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -35,6 +36,7 @@ public class DialyFragment extends Fragment {
     private final String TAG = getClass().getSimpleName();
 
     public static final String KEY_BEFORE_DATE = "beforeDate";
+    public static final String KEY_DATE = "date";
 
     @InjectView(R.id.rcv_stories)
     RecyclerView mStoriesRcv;
@@ -42,9 +44,21 @@ public class DialyFragment extends Fragment {
     @InjectView(R.id.srl_refresh)
     SwipeRefreshLayout mRefreshLayout;
 
-    private StoriesRcvAdapter mRcvAdapter;
+    private StoriesAdapter mStoriesAdapter;
 
     private String mBeforeDate;
+
+    public static DialyFragment newInstance(String date) {
+
+        if (date == null) {
+            throw new IllegalArgumentException("The args value can not be null");
+        }
+        Bundle args = new Bundle();
+        args.putString(KEY_BEFORE_DATE, date);
+        DialyFragment fragment = new DialyFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
     public void onAttach(Activity activity) {
@@ -54,14 +68,6 @@ public class DialyFragment extends Fragment {
         if (args != null) {
             mBeforeDate = args.getString(KEY_BEFORE_DATE, "");
         }
-
-        LogUtil.d(TAG, mBeforeDate + " onAttach");
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        LogUtil.d(TAG, mBeforeDate + " onDestroyView");
     }
 
     @Override
@@ -71,11 +77,6 @@ public class DialyFragment extends Fragment {
         ButterKnife.inject(this, view);
         setupView();
         return view;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
     }
 
     private void setupView() {
@@ -89,15 +90,18 @@ public class DialyFragment extends Fragment {
             }
         });
 
-        mRcvAdapter = new StoriesRcvAdapter(getActivity(), null);
+
+        mStoriesAdapter = new StoriesAdapter(getActivity(), null);
 
         mStoriesRcv.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mStoriesRcv.setAdapter(mRcvAdapter);
+        mStoriesRcv.setItemAnimator(new DefaultItemAnimator());
 
-        mRcvAdapter.setOnItemClickListener(new StoriesRcvAdapter.OnItemClickListener() {
+        mStoriesRcv.setAdapter(mStoriesAdapter);
+
+        mStoriesAdapter.setOnItemClickListener(new BaseRcvAdapter.OnItemClickListener<StoryEntity>() {
             @Override
-            public void onItemClick(View view, int postion) {
-                int storyId = mRcvAdapter.getData().get(postion).getId();
+            public void onItemClick(View view, int position, StoryEntity entity) {
+                int storyId = entity.getId();
                 DetailActivity.startBy(getActivity(), storyId);
             }
         });
@@ -120,9 +124,8 @@ public class DialyFragment extends Fragment {
                     mRefreshLayout.setRefreshing(false);
                 }
 
-                List<StoryEntity> entities = dialyEntity.getStories();
-                if (entities != null && mStoriesRcv != null && mRcvAdapter != null) {
-                    mRcvAdapter.replace(entities);
+                if (mStoriesAdapter != null) {
+                    mStoriesAdapter.replace(dialyEntity.getStories());
                 }
             }
         });

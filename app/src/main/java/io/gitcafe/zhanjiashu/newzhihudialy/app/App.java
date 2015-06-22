@@ -31,6 +31,7 @@ public class App extends Application {
         mContext = this;
         mConnectivityManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
         initImageLoader();
+        LogUtil.d(TAG, "App reset");
     }
 
     public static Context getContext() {

@@ -1,18 +1,14 @@
-package io.gitcafe.zhanjiashu.newzhihudialy.ui.activity;
+package io.gitcafe.zhanjiashu.newzhihudialy.activity;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.LinearLayout;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import io.gitcafe.zhanjiashu.newzhihudialy.R;
-import io.gitcafe.zhanjiashu.newzhihudialy.ui.fragment.SettingsFragment;
-import io.gitcafe.zhanjiashu.newzhihudialy.util.DisplayUtils;
+import io.gitcafe.zhanjiashu.newzhihudialy.fragment.SettingsFragment;
 
 public class SettingsActivity extends BaseActivity {
 
@@ -44,8 +40,6 @@ public class SettingsActivity extends BaseActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
         if (id == android.R.id.home) {
             finish();
             return true;

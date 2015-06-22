@@ -1,26 +1,40 @@
-<android.support.v4.widget.DrawerLayout
+<merge
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/dl_drawer">
+    android:fitsSystemWindows="true">
 
-    <FrameLayout
-        android:id="@+id/fl_container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
-    <ListView
-        android:id="@+id/id_lv_left_menu"
+    <android.support.v4.widget.DrawerLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:paddingTop="0dp"
-        android:background="#ffffffff"
-        android:clipToPadding="false"
-        android:divider="@null"
-        android:choiceMode="singleChoice"
-        android:listSelector="?attr/selectableItemBackground"
-        android:scrollbars="none"
-        />
+        android:id="@+id/dl_drawer">
 
-</android.support.v4.widget.DrawerLayout>
+        <FrameLayout
+            android:id="@+id/fl_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true"/>
+
+<!--        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rcv_left_nav"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:scrollbars="none"
+            android:background="@android:color/white"
+            />-->
+        <ListView
+            android:id="@+id/lv_left_nav"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:background="@android:color/white"
+            android:fitsSystemWindows="true"
+            android:divider="@null"
+            android:choiceMode="singleChoice"
+            android:listSelector="?attr/selectableItemBackground"
+            android:scrollbars="none"/>
+
+    </android.support.v4.widget.DrawerLayout>
+
+</merge>

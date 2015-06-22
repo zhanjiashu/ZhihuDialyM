@@ -1,18 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="192dp"
-                android:background="?attr/colorPrimaryDark"
-                android:orientation="vertical"
-                android:paddingTop="24dp"
-              android:paddingLeft="20dp"
-                android:theme="@style/ThemeOverlay.AppCompat.Dark">
+                android:background="?attr/colorPrimaryDark">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:layout_width="72dp"
         android:layout_height="72dp"
         android:layout_marginBottom="16dp"
+        android:layout_centerInParent="true"
         android:src="@drawable/editor_profile_avatar"/>
 
 
-</LinearLayout>
+</RelativeLayout>

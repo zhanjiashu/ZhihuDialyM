@@ -1,4 +1,4 @@
-package io.gitcafe.zhanjiashu.newzhihudialy.adapter;
+package io.gitcafe.zhanjiashu.common;
 
 import android.content.Context;
 import android.util.SparseArray;
@@ -13,13 +13,13 @@ import java.util.List;
 /**
  * Created by Jiashu on 2015/4/15.
  */
-public abstract class SimpleBaseAdapter<T> extends BaseAdapter {
+public abstract class BaseListAdapter<T> extends BaseAdapter {
 
     private Context mContext;
     private List<T> mData;
     private int mItemResource;
 
-    public SimpleBaseAdapter(Context context, List<T> data) {
+    public BaseListAdapter(Context context, List<T> data) {
         mContext = context;
         mData = (data == null ? new ArrayList<T>() : data);
     }

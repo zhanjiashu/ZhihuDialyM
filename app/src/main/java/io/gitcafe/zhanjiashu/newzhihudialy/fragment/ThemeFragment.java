@@ -1,4 +1,4 @@
-package io.gitcafe.zhanjiashu.newzhihudialy.ui.fragment;
+package io.gitcafe.zhanjiashu.newzhihudialy.fragment;
 
 
 import android.graphics.Bitmap;
@@ -21,13 +21,16 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import io.gitcafe.zhanjiashu.common.BaseRcvAdapter;
 import io.gitcafe.zhanjiashu.newzhihudialy.R;
-import io.gitcafe.zhanjiashu.newzhihudialy.adapter.StoriesRcvAdapter;
+import io.gitcafe.zhanjiashu.newzhihudialy.adapter.StoriesAdapter;
+import io.gitcafe.zhanjiashu.newzhihudialy.model.DialyEntity;
+import io.gitcafe.zhanjiashu.newzhihudialy.model.StoryEntity;
 import io.gitcafe.zhanjiashu.newzhihudialy.model.ThemeDetailEntity;
-import io.gitcafe.zhanjiashu.newzhihudialy.model.ThemeEntity;
+import io.gitcafe.zhanjiashu.newzhihudialy.task.FetchOldStoryTask;
 import io.gitcafe.zhanjiashu.newzhihudialy.task.FetchThemeDetailTask;
 import io.gitcafe.zhanjiashu.newzhihudialy.task.FetchTask;
-import io.gitcafe.zhanjiashu.newzhihudialy.ui.activity.DetailActivity;
+import io.gitcafe.zhanjiashu.newzhihudialy.activity.DetailActivity;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -41,31 +44,30 @@ public class ThemeFragment extends Fragment {
     @InjectView(R.id.collapsing_toolbar)
     CollapsingToolbarLayout mToolbarLayout;
 
-    @InjectView(R.id.tool_bar)
+    @InjectView(R.id.toolbar)
     Toolbar mToolbar;
 
     @InjectView(R.id.iv_top)
     ImageView mTopView;
 
-/*    @InjectView(R.id.nsv_scroll)
-    NestedScrollView mScrollView;
-
-    @InjectView(R.id.ll_editors)
-    ZHLinearLayout mRecommendersLayout;
-
-    @InjectView(R.id.rcv_editors)
-    RecyclerView mEditorsRcv;*/
-
     @InjectView(R.id.rcv_stories)
     RecyclerView mStoriesRcv;
 
-    private ThemeEntity mThemeEntity;
-
     private DisplayImageOptions mImageOptions;
 
-    private StoriesRcvAdapter mStoriesAdapter;
+    private LinearLayoutManager mRcvLayoutManager;
+
+    private StoriesAdapter mStoriesAdapter;
 
     private int mThemeId;
+
+    public static ThemeFragment newInstance(int themeId) {
+        Bundle args = new Bundle();
+        args.putInt(KEY_THEME_ID, themeId);
+        ThemeFragment fragment = new ThemeFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -97,13 +99,6 @@ public class ThemeFragment extends Fragment {
                 .build();
     }
 
-    private void setupThemeDetail(ThemeDetailEntity entity) {
-        mToolbarLayout.setTitle(entity.getName());
-        ImageLoader.getInstance().displayImage(entity.getImage(), mTopView, mImageOptions);
-
-        mStoriesAdapter.replace(entity.getStories());
-    }
-
     private void setupView() {
 
         final AppCompatActivity appCompatActivity = (AppCompatActivity) getActivity();
@@ -114,15 +109,49 @@ public class ThemeFragment extends Fragment {
             actionBar.setHomeAsUpIndicator(R.drawable.ic_action_menu);
         }
 
-        mStoriesAdapter = new StoriesRcvAdapter(getActivity(), null);
-        mStoriesRcv.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mStoriesRcv.setAdapter(mStoriesAdapter);
+        mStoriesAdapter = new StoriesAdapter(getActivity(), null);
+        mRcvLayoutManager = new LinearLayoutManager(getActivity());
 
-        mStoriesAdapter.setOnItemClickListener(new StoriesRcvAdapter.OnItemClickListener() {
+        mStoriesRcv.setAdapter(mStoriesAdapter);
+        mStoriesRcv.setLayoutManager(mRcvLayoutManager);
+        mStoriesRcv.addOnScrollListener(new RecyclerView.OnScrollListener() {
+
             @Override
-            public void onItemClick(View view, int postion) {
-                int storyId = mStoriesAdapter.getData().get(postion).getId();
-                DetailActivity.startBy(getActivity(), storyId);
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                int lastVisibleItem = mRcvLayoutManager.findLastVisibleItemPosition();
+                if (lastVisibleItem + 1 == mStoriesAdapter.getItemCount()) {
+                    loadStories();
+                }
+            }
+        });
+
+        mStoriesAdapter.setOnItemClickListener(new BaseRcvAdapter.OnItemClickListener<StoryEntity>() {
+            @Override
+            public void onItemClick(View view, int position, StoryEntity entity) {
+                DetailActivity.startBy(getActivity(), entity.getId());
+            }
+        });
+    }
+
+    private void setupThemeDetail(ThemeDetailEntity entity) {
+        mToolbarLayout.setTitle(entity.getName());
+        ImageLoader.getInstance().displayImage(entity.getImage(), mTopView, mImageOptions);
+
+        mStoriesAdapter.replace(entity.getStories());
+    }
+
+    private void loadStories() {
+
+        FetchOldStoryTask task = new FetchOldStoryTask(
+                getActivity(),
+                mThemeId,
+                mStoriesAdapter.getLastItem().getId(),
+                true);
+        task.execute(new FetchTask.FetchCallback<DialyEntity>() {
+            @Override
+            public void onFetchResponse(DialyEntity dialyEntity) {
+                mStoriesAdapter.addAll(dialyEntity.getStories());
             }
         });
     }

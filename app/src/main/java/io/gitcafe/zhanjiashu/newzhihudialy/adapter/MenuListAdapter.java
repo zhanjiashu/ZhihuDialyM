@@ -1,6 +1,7 @@
 package io.gitcafe.zhanjiashu.newzhihudialy.adapter;
 
 import android.content.Context;
+import android.support.v7.widget.CardView;
 import android.view.View;
 import android.widget.TextView;
 
@@ -10,19 +11,20 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import io.gitcafe.zhanjiashu.common.BaseListAdapter;
 import io.gitcafe.zhanjiashu.newzhihudialy.R;
 import io.gitcafe.zhanjiashu.newzhihudialy.model.ThemeEntity;
-import io.gitcafe.zhanjiashu.newzhihudialy.model.ThemeListEntity;
 
 /**
- * Created by Jiashu on 2015/6/9.
+ * Created by Jiashu on 2015/6/18.
  */
-public class NavListAdapter extends SimpleBaseAdapter<ThemeEntity> {
+public class MenuListAdapter extends BaseListAdapter<ThemeEntity> {
 
-    private DisplayImageOptions mDisplayImageOptions;
+    private final DisplayImageOptions mDisplayImageOptions;
 
-    public NavListAdapter(Context context, List<ThemeEntity> data) {
+    public MenuListAdapter(Context context, List<ThemeEntity> data) {
         super(context, data);
+
         mDisplayImageOptions = new DisplayImageOptions.Builder()
                 .showImageOnLoading(R.drawable.push_icon)
                 .showImageOnFail(R.drawable.push_icon)
@@ -33,12 +35,11 @@ public class NavListAdapter extends SimpleBaseAdapter<ThemeEntity> {
 
     @Override
     protected View getItemView(int position, View convertView, ViewHolder holder) {
-        TextView textView = holder.getView(R.id.tv_theme_name);
-        textView.setText(getItem(position).getName());
-
+        TextView nameView = holder.getView(R.id.tv_theme_name);
         CircleImageView imageView = holder.getView(R.id.iv_theme_img);
-        ImageLoader.getInstance().displayImage(getItem(position).getThumbnail(), imageView, mDisplayImageOptions);
 
+        nameView.setText(getItem(position).getName());
+        ImageLoader.getInstance().displayImage(getItem(position).getThumbnail(), imageView, mDisplayImageOptions);
         return convertView;
     }
 
