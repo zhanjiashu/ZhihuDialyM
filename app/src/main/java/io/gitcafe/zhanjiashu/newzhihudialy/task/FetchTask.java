@@ -91,9 +91,10 @@ public abstract class FetchTask<T> {
     }
 
     private void cacheToDisk(String response) {
-        if (mDiskLruCache != null && !mDiskLruCache.isClosed()) {
-            return;
+        if (mDiskLruCache == null || mDiskLruCache.isClosed()) {
+            mDiskLruCache = ZHStorageUtils.getFilesDiskCache(App.getContext());
         }
+
         try {
             DiskLruCache.Editor editor = mDiskLruCache.edit(mCacheKey);
             editor.set(0, response);
@@ -104,13 +105,16 @@ public abstract class FetchTask<T> {
     }
 
     protected void fetchFromeDiskCache(String cacheKey, FetchCallback<T> callback) {
+
         if (mDiskLruCache == null || mDiskLruCache.isClosed()) {
-            return;
+            mDiskLruCache = ZHStorageUtils.getFilesDiskCache(App.getContext());
         }
+
         String cacheStr = null;
         try {
             DiskLruCache.Snapshot snapshot = mDiskLruCache.get(cacheKey);
             if (snapshot != null) {
+
                 InputStream in = snapshot.getInputStream(0);
                 BufferedReader reader = new BufferedReader(new InputStreamReader(in));
                 StringBuilder buffer = new StringBuilder();

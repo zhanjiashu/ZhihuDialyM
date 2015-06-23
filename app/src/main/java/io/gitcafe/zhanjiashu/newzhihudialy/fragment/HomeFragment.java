@@ -100,7 +100,6 @@ public class HomeFragment extends Fragment {
                 mTabDates[i] = format.format(date);
                 dialyType = DialyType.HOME_DIALY;
             }
-
             fragment = DialyFragment.newInstance(DateUtil.getBeforeDate(date), dialyType);
             mFragmentList.add(fragment);
         }

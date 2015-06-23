@@ -47,6 +47,7 @@ public class ZHStorageUtils {
     }
 
     public static boolean hasCacheInDisk(DiskLruCache diskLruCache, String key) {
+
         if (diskLruCache != null && !diskLruCache.isClosed() && !TextUtils.isEmpty(key)) {
             try {
                 DiskLruCache.Snapshot snapshot = diskLruCache.get(key);

@@ -1,7 +1,9 @@
 package io.gitcafe.zhanjiashu.newzhihudialy.activity;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.os.Handler;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -72,12 +74,13 @@ public class MainActivity extends BaseActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
 
                 int newPosition = position - 1;
+                Fragment fragment;
                 if (newPosition == 0) {
-                    mCurrentFragment = new HomeFragment();
+                    fragment = new HomeFragment();
                 } else {
-                    mCurrentFragment = ThemeFragment.newInstance(mAdapter.getItem(newPosition).getId());
+                    fragment = ThemeFragment.newInstance(mAdapter.getItem(newPosition).getId());
                 }
-                replaceFragment(mCurrentFragment);
+                replaceFragment(fragment);
                 mDrawerLayout.closeDrawers();
 
             }
@@ -118,11 +121,25 @@ public class MainActivity extends BaseActivity {
         }
 
         if (mCurrentFragment instanceof ThemeFragment) {
-            mCurrentFragment = new HomeFragment();
             mLeftNavListView.setItemChecked(1, true);
-            replaceFragment(mCurrentFragment);
+            replaceFragment(new HomeFragment());
             return;
         }
+
+        if (mCurrentFragment instanceof HomeFragment) {
+            Snackbar
+                    .make(findViewById(android.R.id.content), "是否退出程序？", Snackbar.LENGTH_LONG)
+                    .setAction("退出", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            MainActivity.this.finish();
+                        }
+                    })
+                    .setActionTextColor(ColorStateList.valueOf(getResources().getColor(R.color.material_colorPrimary)))
+                    .show();
+            return;
+        }
+
         super.onBackPressed();
     }
 
@@ -135,9 +152,11 @@ public class MainActivity extends BaseActivity {
 
     private void replaceFragment(Fragment fragment) {
         if (findViewById(R.id.fl_container) != null && fragment != null) {
-            getSupportFragmentManager().beginTransaction()
+            getSupportFragmentManager()
+                    .beginTransaction()
                     .replace(R.id.fl_container, fragment)
                     .commit();
+            mCurrentFragment = fragment;
         }
     }
 }
