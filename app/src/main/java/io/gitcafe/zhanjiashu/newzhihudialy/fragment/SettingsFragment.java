@@ -1,6 +1,7 @@
 package io.gitcafe.zhanjiashu.newzhihudialy.fragment;
 
 
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.preference.Preference;
@@ -61,6 +62,7 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
         String key = preference.getKey();
         if (CLEAR_CACHE.equals(key)) {
             Snackbar.make(getView(), "确定要清除缓存？", Snackbar.LENGTH_LONG)
+                    .setActionTextColor(ColorStateList.valueOf(getResources().getColor(R.color.material_colorPrimary)))
                     .setAction("Yes", new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -69,7 +71,6 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
                     })
                     .show();
         }
-
         return true;
     }
 

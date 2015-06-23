@@ -1,7 +1,6 @@
 package io.gitcafe.zhanjiashu.newzhihudialy.adapter;
 
 import android.content.Context;
-import android.support.v7.widget.CardView;
 import android.view.View;
 import android.widget.TextView;
 
@@ -11,7 +10,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import io.gitcafe.zhanjiashu.common.BaseListAdapter;
+import io.gitcafe.zhanjiashu.common.adapter.BaseListAdapter;
 import io.gitcafe.zhanjiashu.newzhihudialy.R;
 import io.gitcafe.zhanjiashu.newzhihudialy.model.ThemeEntity;
 

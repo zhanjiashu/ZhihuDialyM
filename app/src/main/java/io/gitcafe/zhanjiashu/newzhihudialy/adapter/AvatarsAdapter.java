@@ -13,7 +13,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import io.gitcafe.zhanjiashu.common.BaseRcvAdapter;
+import io.gitcafe.zhanjiashu.common.adapter.BaseRcvAdapter;
 import io.gitcafe.zhanjiashu.newzhihudialy.R;
 
 /**

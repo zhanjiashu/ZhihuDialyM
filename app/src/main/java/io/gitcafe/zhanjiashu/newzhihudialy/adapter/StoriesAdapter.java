@@ -16,7 +16,7 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import io.gitcafe.zhanjiashu.common.BaseRcvAdapter;
+import io.gitcafe.zhanjiashu.common.adapter.BaseRcvAdapter;
 import io.gitcafe.zhanjiashu.newzhihudialy.R;
 import io.gitcafe.zhanjiashu.newzhihudialy.model.StoryEntity;
 
