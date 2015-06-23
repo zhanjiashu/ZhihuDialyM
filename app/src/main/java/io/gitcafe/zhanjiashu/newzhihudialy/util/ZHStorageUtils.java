@@ -19,6 +19,8 @@ import io.gitcafe.zhanjiashu.newzhihudialy.app.App;
  */
 public class ZHStorageUtils {
 
+    private static DiskLruCache mFilesDiskCache;
+
     public static File getDiskCacheDir(Context context, String dir) {
         if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())
                 || !Environment.isExternalStorageRemovable()) {
@@ -29,22 +31,23 @@ public class ZHStorageUtils {
     }
 
     public static DiskLruCache getFilesDiskCache(Context context) {
-
-        DiskLruCache diskLruCache = null;
-        try {
-            File cacheDir = getDiskCacheDir(context, "files");
-            if (!cacheDir.exists()) {
-                cacheDir.mkdirs();
+        if (mFilesDiskCache == null || mFilesDiskCache.isClosed()) {
+            try {
+                File cacheDir = getDiskCacheDir(context, "files");
+                if (!cacheDir.exists()) {
+                    cacheDir.mkdirs();
+                }
+                mFilesDiskCache = DiskLruCache.open(cacheDir, App.getAppVersion(context), 1, 30 * 1024 * 1024);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-            diskLruCache = DiskLruCache.open(cacheDir, App.getAppVersion(context), 1, 30 * 1024 * 1024);
-        } catch (IOException e) {
-            e.printStackTrace();
         }
-        return diskLruCache;
+
+        return mFilesDiskCache;
     }
 
     public static boolean hasCacheInDisk(DiskLruCache diskLruCache, String key) {
-        if (diskLruCache != null && !TextUtils.isEmpty(key)) {
+        if (diskLruCache != null && !diskLruCache.isClosed() && !TextUtils.isEmpty(key)) {
             try {
                 DiskLruCache.Snapshot snapshot = diskLruCache.get(key);
                 if (snapshot != null) {

@@ -36,6 +36,7 @@ import io.gitcafe.zhanjiashu.newzhihudialy.R;
 import io.gitcafe.zhanjiashu.newzhihudialy.activity.PickerActivity;
 import io.gitcafe.zhanjiashu.newzhihudialy.activity.SettingsActivity;
 import io.gitcafe.zhanjiashu.newzhihudialy.adapter.DialyFragmentAdapter;
+import io.gitcafe.zhanjiashu.newzhihudialy.model.DialyType;
 import io.gitcafe.zhanjiashu.newzhihudialy.util.DateUtil;
 
 /**
@@ -85,18 +86,22 @@ public class HomeFragment extends Fragment {
 
     private void setupViewPager() {
         mFragmentList = new ArrayList<>();
-        mTabDates[0] = "今日热闻";
-
         SimpleDateFormat format = new SimpleDateFormat("MM月dd日·E", Locale.CHINA);
         Calendar calendar = Calendar.getInstance();
 
-        mFragmentList.add(new DialyFragment());
-
-        for (int i = 1; i < mTabDates.length; i++) {
+        for (int i = 0; i < mTabDates.length; i++) {
             DialyFragment fragment;
             Date date = DateUtil.getOffsetDate(calendar.getTimeInMillis(), -i);
-            mTabDates[i] = format.format(date);
-            fragment = DialyFragment.newInstance(DateUtil.getBeforeDate(date));
+            int dialyType;
+            if (i == 0) {
+                mTabDates[i] = "今日热闻";
+                dialyType = DialyType.LATEST_DIALY;
+            } else {
+                mTabDates[i] = format.format(date);
+                dialyType = DialyType.HOME_DIALY;
+            }
+
+            fragment = DialyFragment.newInstance(DateUtil.getBeforeDate(date), dialyType);
             mFragmentList.add(fragment);
         }
 

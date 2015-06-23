@@ -13,14 +13,14 @@ public class FetchDialyTask extends FetchTask<DialyEntity> {
 
     private static final String URL_BEFORE = "http://news-at.zhihu.com/api/4/stories/before/";
 
-    public FetchDialyTask(Context context, String date, boolean fetchFromNetwork) {
-        super(context, URL_BEFORE + date, fetchFromNetwork);
+    public FetchDialyTask(Context context, String date, boolean fetchFromNetworkFirst, boolean cacheOnDisk) {
+        super(context, URL_BEFORE + date, fetchFromNetworkFirst, cacheOnDisk);
     }
 
     @Override
     protected void parseResponse(String response, FetchCallback<DialyEntity> callback) {
         DialyEntity entity = new Gson().fromJson(response, DialyEntity.class);
-        if (callback != null && entity != null) {
+        if (entity != null) {
             callback.onFetchResponse(entity);
         }
     }

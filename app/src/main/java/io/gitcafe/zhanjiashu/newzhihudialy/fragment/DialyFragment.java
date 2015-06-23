@@ -13,7 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -22,11 +22,13 @@ import io.gitcafe.zhanjiashu.common.adapter.BaseRcvAdapter;
 import io.gitcafe.zhanjiashu.newzhihudialy.R;
 import io.gitcafe.zhanjiashu.newzhihudialy.adapter.StoriesAdapter;
 import io.gitcafe.zhanjiashu.newzhihudialy.model.DialyEntity;
+import io.gitcafe.zhanjiashu.newzhihudialy.model.DialyType;
 import io.gitcafe.zhanjiashu.newzhihudialy.model.StoryEntity;
 import io.gitcafe.zhanjiashu.newzhihudialy.task.FetchDialyTask;
 import io.gitcafe.zhanjiashu.newzhihudialy.task.FetchLatestDialyTask;
 import io.gitcafe.zhanjiashu.newzhihudialy.task.FetchTask;
 import io.gitcafe.zhanjiashu.newzhihudialy.activity.DetailActivity;
+import io.gitcafe.zhanjiashu.newzhihudialy.util.LogUtil;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -36,7 +38,7 @@ public class DialyFragment extends Fragment {
     private final String TAG = getClass().getSimpleName();
 
     public static final String KEY_BEFORE_DATE = "beforeDate";
-    public static final String KEY_DATE = "date";
+    public static final String KEY_DIALY_TYPE = "dialyType";
 
     @InjectView(R.id.rcv_stories)
     RecyclerView mStoriesRcv;
@@ -47,14 +49,15 @@ public class DialyFragment extends Fragment {
     private StoriesAdapter mStoriesAdapter;
 
     private String mBeforeDate;
+    private int mDialyType;
 
-    public static DialyFragment newInstance(String date) {
-
-        if (date == null) {
+    public static DialyFragment newInstance(String beforeDate, int dialyType) {
+        if (beforeDate == null) {
             throw new IllegalArgumentException("The args value can not be null");
         }
         Bundle args = new Bundle();
-        args.putString(KEY_BEFORE_DATE, date);
+        args.putString(KEY_BEFORE_DATE, beforeDate);
+        args.putInt(KEY_DIALY_TYPE, dialyType);
         DialyFragment fragment = new DialyFragment();
         fragment.setArguments(args);
         return fragment;
@@ -66,7 +69,8 @@ public class DialyFragment extends Fragment {
 
         Bundle args = getArguments();
         if (args != null) {
-            mBeforeDate = args.getString(KEY_BEFORE_DATE, "");
+            mBeforeDate = args.getString(KEY_BEFORE_DATE);
+            mDialyType = args.getInt(KEY_DIALY_TYPE);
         }
     }
 
@@ -86,18 +90,20 @@ public class DialyFragment extends Fragment {
         mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                fetchDialy(true);
+                fetchDialy(mBeforeDate, mDialyType, true);
             }
         });
-
-
-        mStoriesAdapter = new StoriesAdapter(getActivity(), null);
 
         mStoriesRcv.setLayoutManager(new LinearLayoutManager(getActivity()));
         mStoriesRcv.setItemAnimator(new DefaultItemAnimator());
 
-        mStoriesRcv.setAdapter(mStoriesAdapter);
+        if (mDialyType == DialyType.PICK_DIALY) {
+            mStoriesAdapter = new StoriesAdapter(getActivity(), new ArrayList<StoryEntity>(), false);
+        } else {
+            mStoriesAdapter = new StoriesAdapter(getActivity(), new ArrayList<StoryEntity>(), true);
+        }
 
+        mStoriesRcv.setAdapter(mStoriesAdapter);
         mStoriesAdapter.setOnItemClickListener(new BaseRcvAdapter.OnItemClickListener<StoryEntity>() {
             @Override
             public void onItemClick(View view, int position, StoryEntity entity) {
@@ -106,16 +112,24 @@ public class DialyFragment extends Fragment {
             }
         });
 
-        fetchDialy(false);
+        fetchDialy(mBeforeDate, mDialyType, false);
     }
 
-    private void fetchDialy(boolean networkFirst) {
-        FetchTask<DialyEntity> task;
-        if (mBeforeDate != null) {
-            task = new FetchDialyTask(getActivity(), mBeforeDate, networkFirst);
-        } else {
-            task = new FetchLatestDialyTask(getActivity());
+    private void fetchDialy(String beforeDate, int dialyType, boolean isRefresh) {
+        boolean fetchFromNetworkFirst = false;
+        boolean cacheOnDisk = true;
+        if (isRefresh || dialyType == DialyType.LATEST_DIALY) {
+            fetchFromNetworkFirst = true;
         }
+        if (dialyType == DialyType.PICK_DIALY) {
+            fetchFromNetworkFirst = true;
+            cacheOnDisk = false;
+        }
+
+        FetchTask<DialyEntity> task;
+        task = new FetchDialyTask(getActivity(), mBeforeDate, fetchFromNetworkFirst, cacheOnDisk);
+        LogUtil.d(TAG, dialyType + " -> " + fetchFromNetworkFirst + " ->> " + cacheOnDisk);
+
         task.execute(new FetchTask.FetchCallback<DialyEntity>() {
             @Override
             public void onFetchResponse(DialyEntity dialyEntity) {
@@ -130,5 +144,4 @@ public class DialyFragment extends Fragment {
             }
         });
     }
-
 }

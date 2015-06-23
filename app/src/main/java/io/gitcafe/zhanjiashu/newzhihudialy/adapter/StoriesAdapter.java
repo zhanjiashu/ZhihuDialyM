@@ -32,16 +32,20 @@ public class StoriesAdapter extends BaseRcvAdapter<StoryEntity> {
         static final int TEXT_AND_IMAGE = 2;
     }
 
-    public StoriesAdapter(Context context, List<StoryEntity> data) {
+    public StoriesAdapter(Context context, List<StoryEntity> data, boolean cacheOnDisk) {
         super(context, data);
 
         mDisplayImageOptions = new DisplayImageOptions.Builder()
                 .showImageOnLoading(R.drawable.push_icon)
                 .showImageOnFail(R.drawable.push_icon)
                 .cacheInMemory(true)
-                .cacheOnDisk(true)
+                .cacheOnDisk(cacheOnDisk)
                 .bitmapConfig(Bitmap.Config.RGB_565)
                 .build();
+    }
+
+    public StoriesAdapter(Context context, List<StoryEntity> data) {
+        this(context, data, true);
     }
 
     @Override

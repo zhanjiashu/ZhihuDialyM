@@ -10,6 +10,7 @@ import android.view.MenuItem;
 
 import io.gitcafe.zhanjiashu.newzhihudialy.R;
 import io.gitcafe.zhanjiashu.newzhihudialy.fragment.DialyFragment;
+import io.gitcafe.zhanjiashu.newzhihudialy.model.DialyType;
 import io.gitcafe.zhanjiashu.newzhihudialy.util.DateUtil;
 
 public class PickerActivity extends BaseActivity {
@@ -35,7 +36,7 @@ public class PickerActivity extends BaseActivity {
         if (savedInstanceState == null) {
             if (findViewById(R.id.fl_container) != null) {
                 String beforeDate = DateUtil.getBeforeDate(getIntent().getLongExtra(EXTRA_MILLISECONDS, 0));
-                DialyFragment fragment = DialyFragment.newInstance(beforeDate);
+                DialyFragment fragment = DialyFragment.newInstance(beforeDate, DialyType.PICK_DIALY);
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fl_container, fragment)
                         .commit();

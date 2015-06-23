@@ -2,7 +2,6 @@ package io.gitcafe.zhanjiashu.newzhihudialy.task;
 
 import android.content.Context;
 import android.text.TextUtils;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -26,7 +25,8 @@ import io.gitcafe.zhanjiashu.newzhihudialy.util.VolleyUtils;
 public abstract class FetchTask<T> {
     private final String TAG = "FetchTask";
     private String mUrl;
-    private boolean mFetchFromNetwork;
+    private boolean mFetchFromNetworkFirst;
+    private boolean mCacheOnDisk;
 
     protected VolleyUtils mVolleyUtils;
 
@@ -36,15 +36,18 @@ public abstract class FetchTask<T> {
 
     protected Request mRequest;
 
-    public FetchTask(Context context, String url, boolean fetchFromNetwork) {
+    public FetchTask(Context context, String url, boolean fetchFromNetworkFirst, boolean cacheOnDisk) {
         mUrl = url;
-        mFetchFromNetwork = fetchFromNetwork;
+        mFetchFromNetworkFirst = fetchFromNetworkFirst;
+        mCacheOnDisk = cacheOnDisk;
 
         mVolleyUtils = VolleyUtils.getInstance(App.getContext());
-
         mDiskLruCache = ZHStorageUtils.getFilesDiskCache(context);
-
         mCacheKey = ZHStorageUtils.hashKeyForDisk(mUrl);
+    }
+
+    public FetchTask(Context context, String url, boolean fetchFromNetworkFirst) {
+        this(context, url, fetchFromNetworkFirst, true);
     }
 
     public void execute(FetchCallback<T> callback) {
@@ -52,7 +55,7 @@ public abstract class FetchTask<T> {
 
         boolean hasCacheFile = ZHStorageUtils.hasCacheInDisk(mDiskLruCache, cacheKey);
 
-        if (mFetchFromNetwork && App.checkNetwork() || !hasCacheFile) {
+        if (mFetchFromNetworkFirst && App.checkNetwork() || !hasCacheFile) {
             fetchFromNetwork(mUrl, callback);
         } else {
             fetchFromeDiskCache(mCacheKey, callback);
@@ -65,14 +68,21 @@ public abstract class FetchTask<T> {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        cacheToDisk(response);
-                        fetchFromeDiskCache(mCacheKey, callback);
+                        if (TextUtils.isEmpty(response)) {
+                            return;
+                        }
+                        if (mCacheOnDisk) {
+                            cacheToDisk(response);
+                            fetchFromeDiskCache(mCacheKey, callback);
+                        } else {
+                            parseResponse(response, callback);
+                        }
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
-
+                        LogUtil.d(TAG, volleyError.toString());
                     }
                 }
         );
@@ -81,6 +91,9 @@ public abstract class FetchTask<T> {
     }
 
     private void cacheToDisk(String response) {
+        if (mDiskLruCache != null && !mDiskLruCache.isClosed()) {
+            return;
+        }
         try {
             DiskLruCache.Editor editor = mDiskLruCache.edit(mCacheKey);
             editor.set(0, response);
@@ -91,16 +104,17 @@ public abstract class FetchTask<T> {
     }
 
     protected void fetchFromeDiskCache(String cacheKey, FetchCallback<T> callback) {
-
+        if (mDiskLruCache == null || mDiskLruCache.isClosed()) {
+            return;
+        }
         String cacheStr = null;
         try {
             DiskLruCache.Snapshot snapshot = mDiskLruCache.get(cacheKey);
             if (snapshot != null) {
-                LogUtil.d("DetailFragment", cacheKey);
                 InputStream in = snapshot.getInputStream(0);
                 BufferedReader reader = new BufferedReader(new InputStreamReader(in));
                 StringBuilder buffer = new StringBuilder();
-                String line = "";
+                String line;
                 while ((line = reader.readLine()) != null){
                     buffer.append(line);
                 }
@@ -110,7 +124,7 @@ public abstract class FetchTask<T> {
             e.printStackTrace();
         }
 
-        if (!TextUtils.isEmpty(cacheStr)) {
+        if (!TextUtils.isEmpty(cacheStr) && callback != null) {
             parseResponse(cacheStr, callback);
         }
     }

@@ -29,7 +29,6 @@ public class DialyFragmentAdapter<T extends Fragment> extends FragmentStatePager
 
     @Override
     public Fragment getItem(int position) {
-        LogUtil.d("DialyFragment", "getItem " + position);
         return mFragmentList.get(position);
     }
 

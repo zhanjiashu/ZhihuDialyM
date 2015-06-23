@@ -11,7 +11,6 @@ import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.webkit.WebView;
 
-import com.jakewharton.disklrucache.DiskLruCache;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.io.File;
@@ -20,12 +19,15 @@ import java.text.DecimalFormat;
 
 import io.gitcafe.zhanjiashu.newzhihudialy.R;
 import io.gitcafe.zhanjiashu.newzhihudialy.app.App;
+import io.gitcafe.zhanjiashu.newzhihudialy.util.LogUtil;
 import io.gitcafe.zhanjiashu.newzhihudialy.util.ZHStorageUtils;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class SettingsFragment extends PreferenceFragment implements Preference.OnPreferenceClickListener {
+
+    private final String TAG = getClass().getSimpleName();
 
     public static final String CLEAR_CACHE = "clear_cache";
     public static final String ABOUT_APP = "about_app";
@@ -35,8 +37,6 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
 
     Preference mClearCachePref;
     Preference mAppVersionPref;
-
-    private DiskLruCache mFilesDiskLruCache;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -48,10 +48,7 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
 
         mAppVersionPref.setSummary("当前版本号：" + App.getVersionName());
 
-        File uilCacheFile = ImageLoader.getInstance().getDiskCache().getDirectory();
-        mFilesDiskLruCache = ZHStorageUtils.getFilesDiskCache(getActivity());
-
-        double cacheSize = ZHStorageUtils.getDirSize(uilCacheFile) + mFilesDiskLruCache.size() / (1024 * 1024);
+        double cacheSize = calculateCacheSize();
         DecimalFormat decimalFormat = new DecimalFormat("#0.00");
         mClearCachePref.setSummary("缓存大小：" + decimalFormat.format(cacheSize) + " M");
         mClearCachePref.setOnPreferenceClickListener(this);
@@ -74,14 +71,23 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
         return true;
     }
 
+    private double calculateCacheSize() {
+        File uilCacheFile = ImageLoader.getInstance().getDiskCache().getDirectory();
+        return ZHStorageUtils.getDirSize(uilCacheFile) +
+                ZHStorageUtils.getFilesDiskCache(getActivity()).size() / (1024 * 1024);
+    }
+
     private void clearCache() {
         try {
             ImageLoader.getInstance().getDiskCache().clear();
-            mFilesDiskLruCache.delete();
+            ZHStorageUtils.getFilesDiskCache(getActivity()).delete();
             new WebView(getActivity()).clearCache(true);
-            mClearCachePref.setSummary("缓存大小：0.00 M");
         } catch (IOException e) {
             e.printStackTrace();
         }
+        if (calculateCacheSize() == 0.0) {
+            Snackbar.make(getView(), "缓存清理完成", Snackbar.LENGTH_SHORT).show();
+        }
+        mClearCachePref.setSummary("缓存大小：0.00 M");
     }
 }
