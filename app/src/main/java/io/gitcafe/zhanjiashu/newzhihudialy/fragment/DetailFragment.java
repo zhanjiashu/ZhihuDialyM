@@ -45,8 +45,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import io.gitcafe.zhanjiashu.newzhihudialy.R;
 import io.gitcafe.zhanjiashu.newzhihudialy.adapter.AvatarsAdapter;
-import io.gitcafe.zhanjiashu.newzhihudialy.other.JavaScriptInterface;
-import io.gitcafe.zhanjiashu.newzhihudialy.util.LogUtil;
+import io.gitcafe.zhanjiashu.common.util.LogUtil;
 import io.gitcafe.zhanjiashu.newzhihudialy.util.NetworkHelper;
 import io.gitcafe.zhanjiashu.newzhihudialy.util.PreferenceHelper;
 import io.gitcafe.zhanjiashu.newzhihudialy.widget.ZHLinearLayout;
@@ -54,7 +53,7 @@ import io.gitcafe.zhanjiashu.newzhihudialy.model.MemberEntity;
 import io.gitcafe.zhanjiashu.newzhihudialy.model.StoryDetailEntity;
 import io.gitcafe.zhanjiashu.newzhihudialy.task.FetchDetailTask;
 import io.gitcafe.zhanjiashu.newzhihudialy.task.FetchTask;
-import io.gitcafe.zhanjiashu.newzhihudialy.util.DisplayUtils;
+import io.gitcafe.zhanjiashu.common.util.DisplayUtils;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -166,7 +165,7 @@ public class DetailFragment extends Fragment {
         DisplayMetrics metrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
-        int statusHeight = DisplayUtils.STATUS_BAR_HEIGHT;
+        int statusHeight = DisplayUtils.getStatusBarHeight(getActivity());
 
         mActionbarSizeTypedArray = getActivity().obtainStyledAttributes(new int[]{android.R.attr.actionBarSize});
         int actionBarHeight = (int) mActionbarSizeTypedArray.getDimension(0, 0);

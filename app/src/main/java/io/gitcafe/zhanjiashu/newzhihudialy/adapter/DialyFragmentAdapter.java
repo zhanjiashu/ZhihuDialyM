@@ -8,8 +8,6 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.gitcafe.zhanjiashu.newzhihudialy.util.LogUtil;
-
 /**
  * Created by Jiashu on 2015/5/31.
  */

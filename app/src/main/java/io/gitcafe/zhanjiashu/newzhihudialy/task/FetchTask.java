@@ -15,7 +15,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import io.gitcafe.zhanjiashu.newzhihudialy.app.App;
-import io.gitcafe.zhanjiashu.newzhihudialy.util.LogUtil;
+import io.gitcafe.zhanjiashu.common.util.LogUtil;
 import io.gitcafe.zhanjiashu.newzhihudialy.util.NetworkHelper;
 import io.gitcafe.zhanjiashu.newzhihudialy.util.ZHStorageUtils;
 import io.gitcafe.zhanjiashu.newzhihudialy.util.VolleyUtils;

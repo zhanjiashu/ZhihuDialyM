@@ -30,13 +30,6 @@
         <dex dex="C:\Users\Jiashu\OneDrive\Workplace\Android\ForGitHub\ZhihuDialyM\app\build\intermediates\pre-dexed\debug\classes-eb2e46501e858a6c4bea32ad38a89218cc401a97.jar" />
     </item>
     <item
-        jar="C:\Users\Jiashu\OneDrive\Workplace\Android\ForGitHub\ZhihuDialyM\app\build\intermediates\exploded-aar\com.android.support\recyclerview-v7\22.2.0\jars\classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="5b37cf49773f7f17aca9830efd3053b0cac56728">
-        <dex dex="C:\Users\Jiashu\OneDrive\Workplace\Android\ForGitHub\ZhihuDialyM\app\build\intermediates\pre-dexed\debug\classes-ca12b7c23548873300e754b7f1f6d3116117adfa.jar" />
-    </item>
-    <item
         jar="C:\Users\Jiashu\.gradle\caches\modules-2\files-2.1\com.jakewharton\disklrucache\2.0.2\93b399470e72c0bc8cb52379943b63c9aa586cd8\disklrucache-2.0.2.jar"
         jumboMode="false"
         revision="22.0.1"
@@ -51,11 +44,25 @@
         <dex dex="C:\Users\Jiashu\OneDrive\Workplace\Android\FromGitHub\NewZhihuDialy\app\build\intermediates\pre-dexed\debug\jsoup-1.7.3-595fcf49d0f8c275c535ef7a47949c78fe6ad360.jar" />
     </item>
     <item
+        jar="C:\Users\Jiashu\OneDrive\Workplace\Android\ForGitHub\ZhihuDialyM\app\build\intermediates\exploded-aar\com.android.support\recyclerview-v7\22.2.0\jars\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="5b37cf49773f7f17aca9830efd3053b0cac56728">
+        <dex dex="C:\Users\Jiashu\OneDrive\Workplace\Android\ForGitHub\ZhihuDialyM\app\build\intermediates\pre-dexed\debug\classes-ca12b7c23548873300e754b7f1f6d3116117adfa.jar" />
+    </item>
+    <item
         jar="C:\Users\Jiashu\OneDrive\Workplace\Android\ForGitHub\ZhihuDialyM\app\build\intermediates\exploded-aar\de.hdodenhof\circleimageview\1.3.0\jars\classes.jar"
         jumboMode="false"
         revision="22.0.1"
         sha1="ac6948cce36f694f3eb3d73a135e298dc4b3527a">
         <dex dex="C:\Users\Jiashu\OneDrive\Workplace\Android\ForGitHub\ZhihuDialyM\app\build\intermediates\pre-dexed\debug\classes-7beab4d80c322df6b699a6509931f90353f8c505.jar" />
+    </item>
+    <item
+        jar="C:\Users\Jiashu\OneDrive\Workplace\Android\ForGitHub\ZhihuDialyM\app\build\intermediates\exploded-aar\com.android.support\support-v4\22.2.0\jars\classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="1ee588ff2c4daf7b97c1cbf922a6c7f027285c2f">
+        <dex dex="C:\Users\Jiashu\OneDrive\Workplace\Android\ForGitHub\ZhihuDialyM\app\build\intermediates\pre-dexed\debug\classes-2256bd314b7cbf6ac19d596ac04eb38c9061e48c.jar" />
     </item>
     <item
         jar="C:\Users\Jiashu\OneDrive\Workplace\Android\ForGitHub\ZhihuDialyM\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\22.2.0\jars\classes.jar"
@@ -93,18 +100,11 @@
         <dex dex="C:\Users\Jiashu\OneDrive\Workplace\Android\FromGitHub\NewZhihuDialy\app\build\intermediates\pre-dexed\debug\classes-34a517fb1f8f73ebbd938b22ce0b7a394b3cbf11.jar" />
     </item>
     <item
-        jar="C:\Users\Jiashu\OneDrive\Workplace\Android\ForGitHub\ZhihuDialyM\app\build\intermediates\exploded-aar\com.android.support\support-v4\22.2.0\jars\classes.jar"
+        jar="C:\Users\Jiashu\OneDrive\Workplace\Android\FromGitHub\NewZhihuDialy\app\build\intermediates\exploded-aar\com.android.support\design\22.2.0\jars\classes.jar"
         jumboMode="false"
         revision="22.0.1"
-        sha1="1ee588ff2c4daf7b97c1cbf922a6c7f027285c2f">
-        <dex dex="C:\Users\Jiashu\OneDrive\Workplace\Android\ForGitHub\ZhihuDialyM\app\build\intermediates\pre-dexed\debug\classes-2256bd314b7cbf6ac19d596ac04eb38c9061e48c.jar" />
-    </item>
-    <item
-        jar="C:\Users\Jiashu\.gradle\caches\modules-2\files-2.1\com.nostra13.universalimageloader\universal-image-loader\1.9.4\dd9eeb557650c4ad7394df23f0f5cf27a7cfc697\universal-image-loader-1.9.4.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="dd9eeb557650c4ad7394df23f0f5cf27a7cfc697">
-        <dex dex="C:\Users\Jiashu\OneDrive\Workplace\Android\FromGitHub\NewZhihuDialy\app\build\intermediates\pre-dexed\debug\universal-image-loader-1.9.4-2b88c20164985fed7646f1611fe26d10a4023242.jar" />
+        sha1="fc63b820d54c8a27a3a614bdd93920e0076581c2">
+        <dex dex="C:\Users\Jiashu\OneDrive\Workplace\Android\FromGitHub\NewZhihuDialy\app\build\intermediates\pre-dexed\debug\classes-da2069049531c660891da822cfa1b6cb462b6af4.jar" />
     </item>
     <item
         jar="C:\Users\Jiashu\OneDrive\Workplace\Android\FromGitHub\NewZhihuDialy\app\build\intermediates\exploded-aar\com.android.support\recyclerview-v7\22.2.0\jars\classes.jar"
@@ -112,13 +112,6 @@
         revision="22.0.1"
         sha1="5b37cf49773f7f17aca9830efd3053b0cac56728">
         <dex dex="C:\Users\Jiashu\OneDrive\Workplace\Android\FromGitHub\NewZhihuDialy\app\build\intermediates\pre-dexed\debug\classes-28d0f39b1a31886b16c48413c88e0be4be042b01.jar" />
-    </item>
-    <item
-        jar="C:\Users\Jiashu\OneDrive\Workplace\Android\FromGitHub\NewZhihuDialy\app\build\intermediates\exploded-aar\com.android.support\design\22.2.0\jars\classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="fc63b820d54c8a27a3a614bdd93920e0076581c2">
-        <dex dex="C:\Users\Jiashu\OneDrive\Workplace\Android\FromGitHub\NewZhihuDialy\app\build\intermediates\pre-dexed\debug\classes-da2069049531c660891da822cfa1b6cb462b6af4.jar" />
     </item>
     <item
         jar="C:\Users\Jiashu\OneDrive\Workplace\Android\FromGitHub\NewZhihuDialy\app\build\intermediates\exploded-aar\de.hdodenhof\circleimageview\1.3.0\jars\classes.jar"
@@ -135,13 +128,6 @@
         <dex dex="C:\Users\Jiashu\OneDrive\Workplace\Android\ForGitHub\ZhihuDialyM\app\build\intermediates\pre-dexed\debug\jsoup-1.8.2-12e7e3d6db958a32520bcf9cc9f0b3ea263d6d0f.jar" />
     </item>
     <item
-        jar="C:\Users\Jiashu\.gradle\caches\modules-2\files-2.1\com.jakewharton\butterknife\6.1.0\63735f48b82bcd24cdd33821342428252eb1ca5a\butterknife-6.1.0.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="63735f48b82bcd24cdd33821342428252eb1ca5a">
-        <dex dex="C:\Users\Jiashu\OneDrive\Workplace\Android\FromGitHub\NewZhihuDialy\app\build\intermediates\pre-dexed\debug\butterknife-6.1.0-9be68655f624656d903651cb8495405a664ae1af.jar" />
-    </item>
-    <item
         jar="C:\Users\Jiashu\OneDrive\Workplace\Android\FromGitHub\NewZhihuDialy\app\build\intermediates\exploded-aar\com.mcxiaoke.volley\library\1.0.16\jars\classes.jar"
         jumboMode="false"
         revision="22.0.1"
@@ -149,11 +135,25 @@
         <dex dex="C:\Users\Jiashu\OneDrive\Workplace\Android\FromGitHub\NewZhihuDialy\app\build\intermediates\pre-dexed\debug\classes-591d9ab77b17c48236a0e187da0ee6a737e2813a.jar" />
     </item>
     <item
+        jar="C:\Users\Jiashu\.gradle\caches\modules-2\files-2.1\com.jakewharton\butterknife\6.1.0\63735f48b82bcd24cdd33821342428252eb1ca5a\butterknife-6.1.0.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="63735f48b82bcd24cdd33821342428252eb1ca5a">
+        <dex dex="C:\Users\Jiashu\OneDrive\Workplace\Android\FromGitHub\NewZhihuDialy\app\build\intermediates\pre-dexed\debug\butterknife-6.1.0-9be68655f624656d903651cb8495405a664ae1af.jar" />
+    </item>
+    <item
         jar="C:\Users\Jiashu\OneDrive\Workplace\Android\ForGitHub\ZhihuDialyM\app\build\intermediates\exploded-aar\com.android.support\cardview-v7\22.2.0\jars\classes.jar"
         jumboMode="false"
         revision="22.0.1"
         sha1="97f7e239e86ef994de894818fdd8a71d2e89d6aa">
         <dex dex="C:\Users\Jiashu\OneDrive\Workplace\Android\ForGitHub\ZhihuDialyM\app\build\intermediates\pre-dexed\debug\classes-d6521944dd0974c65bd0fd69e19b1b26344a3991.jar" />
+    </item>
+    <item
+        jar="C:\Users\Jiashu\.gradle\caches\modules-2\files-2.1\com.nostra13.universalimageloader\universal-image-loader\1.9.4\dd9eeb557650c4ad7394df23f0f5cf27a7cfc697\universal-image-loader-1.9.4.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="dd9eeb557650c4ad7394df23f0f5cf27a7cfc697">
+        <dex dex="C:\Users\Jiashu\OneDrive\Workplace\Android\FromGitHub\NewZhihuDialy\app\build\intermediates\pre-dexed\debug\universal-image-loader-1.9.4-2b88c20164985fed7646f1611fe26d10a4023242.jar" />
     </item>
     <item
         jar="C:\Users\Jiashu\OneDrive\Workplace\Android\FromGitHub\NewZhihuDialy\app\build\intermediates\exploded-aar\com.android.support\cardview-v7\22.2.0\jars\classes.jar"
@@ -173,7 +173,7 @@
         jar="C:\Users\Jiashu\OneDrive\Workplace\Android\ForGitHub\ZhihuDialyM\app\build\intermediates\exploded-aar\ZhihuDialyM\common\unspecified\jars\classes.jar"
         jumboMode="false"
         revision="22.0.1"
-        sha1="4d5ae3ef00b4efbf0c35c3fe9d223ab0e48723bf">
+        sha1="e2cbd2025da5b82f8ac1a800d4193c435f544c39">
         <dex dex="C:\Users\Jiashu\OneDrive\Workplace\Android\ForGitHub\ZhihuDialyM\app\build\intermediates\pre-dexed\debug\classes-a98cf1c536f54d2aa12a74c149feeebff3fe10f5.jar" />
     </item>
     <item

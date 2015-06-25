@@ -1,4 +1,4 @@
-package io.gitcafe.zhanjiashu.newzhihudialy.util;
+package io.gitcafe.zhanjiashu.common.util;
 
 import android.util.Log;
 

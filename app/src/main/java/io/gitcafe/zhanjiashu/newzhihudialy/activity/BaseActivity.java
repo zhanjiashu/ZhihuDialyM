@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import de.greenrobot.event.EventBus;
 import io.gitcafe.zhanjiashu.newzhihudialy.R;
-import io.gitcafe.zhanjiashu.newzhihudialy.util.DisplayUtils;
+import io.gitcafe.zhanjiashu.common.util.DisplayUtils;
 import io.gitcafe.zhanjiashu.newzhihudialy.util.VolleyUtils;
 
 /**
@@ -38,7 +38,7 @@ public class BaseActivity extends AppCompatActivity {
             View view = new TextView(this);
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT,
-                    DisplayUtils.STATUS_BAR_HEIGHT);
+                    DisplayUtils.getStatusBarHeight(BaseActivity.this));
             view.setBackgroundColor(getResources().getColor(R.color.material_colorPrimary));
             view.setLayoutParams(params);
 

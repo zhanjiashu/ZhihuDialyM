@@ -4,7 +4,6 @@ import android.app.Application;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.net.ConnectivityManager;
 
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiskCache;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -13,7 +12,7 @@ import com.nostra13.universalimageloader.utils.StorageUtils;
 
 import java.io.File;
 
-import io.gitcafe.zhanjiashu.newzhihudialy.util.LogUtil;
+import io.gitcafe.zhanjiashu.common.util.LogUtil;
 
 /**
  * Created by Jiashu on 2015/5/31.

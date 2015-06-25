@@ -1,30 +1,18 @@
 package io.gitcafe.zhanjiashu.newzhihudialy.activity;
 
-import android.content.Intent;
 import android.content.res.ColorStateList;
-import android.os.Handler;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
-import com.rey.material.app.DatePickerDialog;
-import com.rey.material.app.Dialog;
-import com.rey.material.app.DialogFragment;
-
-import java.text.MessageFormat;
-import java.text.SimpleDateFormat;
 import java.util.List;
-import java.util.Locale;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -36,7 +24,6 @@ import io.gitcafe.zhanjiashu.newzhihudialy.task.FetchThemesTask;
 import io.gitcafe.zhanjiashu.newzhihudialy.task.FetchTask;
 import io.gitcafe.zhanjiashu.newzhihudialy.fragment.HomeFragment;
 import io.gitcafe.zhanjiashu.newzhihudialy.fragment.ThemeFragment;
-import io.gitcafe.zhanjiashu.newzhihudialy.util.LogUtil;
 
 public class MainActivity extends BaseActivity {
 
@@ -51,6 +38,8 @@ public class MainActivity extends BaseActivity {
     private List<ThemeEntity> mThemeEntities;
     private MenuListAdapter mAdapter;
     private Fragment mCurrentFragment;
+
+    private int mCheckedMenuItemPosition = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,15 +56,19 @@ public class MainActivity extends BaseActivity {
         mAdapter = new MenuListAdapter(MainActivity.this, mThemeEntities);
         mLeftNavListView.setAdapter(mAdapter);
         mLeftNavListView.addHeaderView(LayoutInflater.from(this).inflate(R.layout.header_nav_user, mLeftNavListView, false));
-        mLeftNavListView.setItemChecked(1, true);
+        mLeftNavListView.setItemChecked(mCheckedMenuItemPosition, true);
         mLeftNavListView.setSelector(R.drawable.bg_nav_list_item);
+
         mLeftNavListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+
                 if (position == 0) {
+
+                    mLeftNavListView.setItemChecked(mCheckedMenuItemPosition, true);
                     return;
                 }
-
+                mCheckedMenuItemPosition = mLeftNavListView.getCheckedItemPosition();
                 int newPosition = position - 1;
                 Fragment fragment;
                 if (newPosition == 0) {

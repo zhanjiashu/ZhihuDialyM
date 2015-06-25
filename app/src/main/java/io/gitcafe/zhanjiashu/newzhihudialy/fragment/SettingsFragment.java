@@ -19,7 +19,6 @@ import java.text.DecimalFormat;
 
 import io.gitcafe.zhanjiashu.newzhihudialy.R;
 import io.gitcafe.zhanjiashu.newzhihudialy.app.App;
-import io.gitcafe.zhanjiashu.newzhihudialy.util.LogUtil;
 import io.gitcafe.zhanjiashu.newzhihudialy.util.ZHStorageUtils;
 
 /**

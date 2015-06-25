@@ -25,10 +25,9 @@ import io.gitcafe.zhanjiashu.newzhihudialy.model.DialyEntity;
 import io.gitcafe.zhanjiashu.newzhihudialy.model.DialyType;
 import io.gitcafe.zhanjiashu.newzhihudialy.model.StoryEntity;
 import io.gitcafe.zhanjiashu.newzhihudialy.task.FetchDialyTask;
-import io.gitcafe.zhanjiashu.newzhihudialy.task.FetchLatestDialyTask;
 import io.gitcafe.zhanjiashu.newzhihudialy.task.FetchTask;
 import io.gitcafe.zhanjiashu.newzhihudialy.activity.DetailActivity;
-import io.gitcafe.zhanjiashu.newzhihudialy.util.LogUtil;
+import io.gitcafe.zhanjiashu.common.util.LogUtil;
 
 /**
  * A simple {@link Fragment} subclass.
