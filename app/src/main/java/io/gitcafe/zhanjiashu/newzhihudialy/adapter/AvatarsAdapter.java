@@ -23,8 +23,12 @@ public class AvatarsAdapter extends BaseRcvAdapter<String> {
 
     private final DisplayImageOptions mDisplayImageOptions;
 
-    public AvatarsAdapter(Context context, List<String> data) {
+    private boolean mIsNoPictureMode;
+
+    public AvatarsAdapter(Context context, List<String> data, boolean isNoPictureMode) {
         super(context, data);
+
+        mIsNoPictureMode = isNoPictureMode;
 
         mDisplayImageOptions = new DisplayImageOptions.Builder()
                 .showImageOnLoading(R.drawable.editor_profile_avatar)
@@ -43,7 +47,9 @@ public class AvatarsAdapter extends BaseRcvAdapter<String> {
     @Override
     protected void onBindAdapterViewHolder(RecyclerView.ViewHolder holder, int position, String str) {
         AvatarViewHolder avatarViewHolder = (AvatarViewHolder) holder;
-        ImageLoader.getInstance().displayImage(str, avatarViewHolder.mAvatarView, mDisplayImageOptions);
+        if (!mIsNoPictureMode) {
+            ImageLoader.getInstance().displayImage(str, avatarViewHolder.mAvatarView, mDisplayImageOptions);
+        }
     }
 
     @Override

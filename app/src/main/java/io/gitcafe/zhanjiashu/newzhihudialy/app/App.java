@@ -1,6 +1,5 @@
 package io.gitcafe.zhanjiashu.newzhihudialy.app;
 
-import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.pm.PackageInfo;
@@ -23,13 +22,11 @@ public class App extends Application {
 
     private static final String TAG = "AppApplication";
     private static Context mContext;
-    private static ConnectivityManager mConnectivityManager;
 
     @Override
     public void onCreate() {
         super.onCreate();
         mContext = this;
-        mConnectivityManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
         initImageLoader();
         LogUtil.d(TAG, "App reset");
     }
@@ -56,14 +53,6 @@ public class App extends Application {
             e.printStackTrace();
         }
         return 1;
-    }
-
-    public static boolean checkNetwork() {
-        if (mConnectivityManager.getActiveNetworkInfo() != null
-                && mConnectivityManager.getActiveNetworkInfo().isAvailable()) {
-            return true;
-        }
-        return false;
     }
 
     public static String getVersionName() {

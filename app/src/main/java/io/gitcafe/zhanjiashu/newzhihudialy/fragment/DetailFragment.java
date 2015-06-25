@@ -24,16 +24,18 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -43,7 +45,11 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import io.gitcafe.zhanjiashu.newzhihudialy.R;
 import io.gitcafe.zhanjiashu.newzhihudialy.adapter.AvatarsAdapter;
-import io.gitcafe.zhanjiashu.newzhihudialy.common.ZHLinearLayout;
+import io.gitcafe.zhanjiashu.newzhihudialy.other.JavaScriptInterface;
+import io.gitcafe.zhanjiashu.newzhihudialy.util.LogUtil;
+import io.gitcafe.zhanjiashu.newzhihudialy.util.NetworkHelper;
+import io.gitcafe.zhanjiashu.newzhihudialy.util.PreferenceHelper;
+import io.gitcafe.zhanjiashu.newzhihudialy.widget.ZHLinearLayout;
 import io.gitcafe.zhanjiashu.newzhihudialy.model.MemberEntity;
 import io.gitcafe.zhanjiashu.newzhihudialy.model.StoryDetailEntity;
 import io.gitcafe.zhanjiashu.newzhihudialy.task.FetchDetailTask;
@@ -58,6 +64,8 @@ public class DetailFragment extends Fragment {
     private final String TAG = getClass().getSimpleName();
 
     public static final String KEY_STORY_ID = "story_id";
+
+    private static final String WEBVIEW_DEFAULT_IMG = "file:///android_asset/default_pic_content_image_download_light.png";
 
     @InjectView(R.id.collapsing_toolbar)
     CollapsingToolbarLayout mToolbarLayout;
@@ -87,6 +95,8 @@ public class DetailFragment extends Fragment {
 
     private TypedArray mActionbarSizeTypedArray;
 
+    private boolean mIsNoPictureMode;
+
     public static DetailFragment newInstance(int storyId) {
         Bundle args = new Bundle();
         args.putInt(KEY_STORY_ID, storyId);
@@ -97,8 +107,10 @@ public class DetailFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        super.onActivityCreated(savedInstanceState);
         setHasOptionsMenu(true);
+        PreferenceHelper helper = PreferenceHelper.getInstance(getActivity());
+        mIsNoPictureMode = helper.isNoPictureEnabled() && NetworkHelper.getInstance(getActivity()).isMobieNetwork();
     }
 
     @Override
@@ -120,13 +132,6 @@ public class DetailFragment extends Fragment {
 
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
-/*            actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_HOME_AS_UP);
-
-            ActionBar.LayoutParams params = new ActionBar.LayoutParams(ActionBar.LayoutParams.WRAP_CONTENT, ActionBar.LayoutParams.WRAP_CONTENT);
-            params.gravity = GravityCompat.END;
-            View actionBarBtns = LayoutInflater.from(getActivity()).inflate(R.layout.menu_detail_layout,
-                    null);
-            actionBar.setCustomView(actionBarBtns, params);*/
         }
 
         intiNestedScrollView();
@@ -174,41 +179,31 @@ public class DetailFragment extends Fragment {
     private void showStoryDetail(final StoryDetailEntity entity) {
 
         mToolbarLayout.setTitle(entity.getTitle());
-
-        ImageLoader.getInstance().displayImage(entity.getImage(), mTopView, mImageOptions);
-
-
+        if (!mIsNoPictureMode) {
+            ImageLoader.getInstance().displayImage(entity.getImage(), mTopView, mImageOptions);
+        }
         List<MemberEntity> recommenderEntities = entity.getRecommenders();
         if (recommenderEntities != null && recommenderEntities.size() > 0) {
-
             List<String> avatarList = new ArrayList<>();
             for (MemberEntity recommenderEntity : recommenderEntities) {
                 avatarList.add(recommenderEntity.getAvatar());
             }
-
             if (avatarList.size() > 0) {
                 mRecommendersLayout.setVisibility(View.VISIBLE);
-                mRecommendersLayout.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Toast.makeText(getActivity(), "HH", Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-                //mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(avatarList.size(), StaggeredGridLayoutManager.VERTICAL));
                 LinearLayoutManager manager = new LinearLayoutManager(getActivity());
                 manager.setOrientation(LinearLayoutManager.HORIZONTAL);
                 mRecyclerView.setLayoutManager(manager);
-
-                AvatarsAdapter adapter = new AvatarsAdapter(getActivity(), avatarList);
+                AvatarsAdapter adapter = new AvatarsAdapter(getActivity(), avatarList, mIsNoPictureMode);
                 mRecyclerView.setAdapter(adapter);
             }
         }
 
+        mWebView.getSettings().setJavaScriptEnabled(true);
+        mWebView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
+
         String contentBody = entity.getBody();
         if (!TextUtils.isEmpty(contentBody)) {
-            String html = formatHtml(entity.getCss(), entity.getBody());
-
+            String html = formatHtml(entity.getCss(), contentBody);
             mWebView.loadDataWithBaseURL(null, html, "text/html", "utf-8", null);
         } else {
             mWebView.setWebViewClient(new WebViewClient() {
@@ -224,32 +219,53 @@ public class DetailFragment extends Fragment {
         mShareBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (entity != null) {
-                    shareText(getActivity(), entity.getTitle() + " " + entity.getShare_url());
-                }
+                shareText(getActivity(), entity.getTitle() + " " + entity.getShare_url());
             }
         });
     }
 
     private String formatHtml(List<String> cssList, String body) {
+        LogUtil.d(TAG, "内容长度" + body.length());
+        LogUtil.d(TAG, "当前是否为无图模式和非Wifi网络：" + mIsNoPictureMode);
         String cssLink = formatCssLink(cssList);
-
         Document document = Jsoup.parse(body);
         document.select("div[class=headline]").remove();
-
-        body = document.select("body").html();
-
-        String temp = "<!doctype Html>\n" +
+        if (mIsNoPictureMode) {
+            Elements imgElts = document.select("img");
+            for (Element element : imgElts) {
+                String imgUrl = element.attr("src");
+                element.attr("src", WEBVIEW_DEFAULT_IMG);
+                element.attr("origin-src", imgUrl);
+            }
+        }
+        body = document.html();
+        String template = "<!doctype Html>\n" +
                 "<html>\n" +
                 "<head>\n" +
                 "{0}\n" +
                 "</head>\n" +
                 "<body>\n" +
                 "{1}\n" +
+                "{2}\n" +
                 "</body>\n" +
                 "\n" +
                 "</html>";
-        return MessageFormat.format(temp, cssLink, body);
+
+        String js = "<script type=\"text/javascript\">\n" +
+                "function downloadImg (imgElt) {\n" +
+                "\tvar imgSrc = imgElt.attributes[\"src\"].value;\n" +
+                "\tvar originImgSrc = imgElt.attributes[\"origin-src\"].value;\n" +
+                "\timgElt.src = originImgSrc;\n" +
+                "}\n" +
+                "x=document.getElementsByTagName(\"img\");\n" +
+                "for (i=0;i<x.length;i++){\n" +
+                "\tx[i].onclick = function () {\n" +
+                "\t\tdownloadImg(this);\n" +
+                "\t};\n" +
+                "}\n" +
+                "</script>";
+
+        return MessageFormat.format(template, cssLink, body, js);
 
     }
 
@@ -289,6 +305,12 @@ public class DetailFragment extends Fragment {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        mWebView.clearCache(true);
     }
 
     private void shareText(Activity activity, String shareText) {

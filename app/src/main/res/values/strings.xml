@@ -16,5 +16,8 @@
     <string name="title_activity_picker">PickerActivity</string>
     <string name="action_settings">Settings</string>
     <string name="action_pick">Picker</string>
+    <string name="pref_key_no_picture_mode">mode_no_picture</string>
+    <string name="pref_title_no_picture_mode">无图模式</string>
+    <string name="pref_summary_no_picture_mode">2G/3G/4G 网络下不下载图片</string>
 
 </resources>

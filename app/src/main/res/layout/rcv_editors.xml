@@ -1,4 +1,4 @@
-<io.gitcafe.zhanjiashu.newzhihudialy.common.ZHLinearLayout
+<io.gitcafe.zhanjiashu.newzhihudialy.widget.ZHLinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/ll_editors"
     android:layout_width="match_parent"
@@ -19,4 +19,4 @@
         android:layout_height="match_parent"
         android:clickable="false"/>
 
-</io.gitcafe.zhanjiashu.newzhihudialy.common.ZHLinearLayout>
+</io.gitcafe.zhanjiashu.newzhihudialy.widget.ZHLinearLayout>

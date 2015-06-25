@@ -6,6 +6,7 @@
     <de.hdodenhof.circleimageview.CircleImageView
                android:layout_width="35dp"
                android:layout_height="35dp"
+               android:src="@drawable/editor_profile_avatar"
                android:id="@+id/iv_avatar"/>
 
 </LinearLayout>

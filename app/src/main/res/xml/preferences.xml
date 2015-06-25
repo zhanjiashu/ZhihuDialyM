@@ -2,12 +2,13 @@
 <PreferenceScreen
     xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory android:title="常规">
+        <CheckBoxPreference android:defaultValue="false" android:key="@string/pref_key_no_picture_mode"
+                            android:title="@string/pref_title_no_picture_mode"
+            android:summary="@string/pref_summary_no_picture_mode"/>
+
         <Preference android:key="clear_cache" android:title="清除缓存"/>
-<!--        <CheckBoxPreference android:defaultValue="true" android:key="enable_fresh_big"
-                            android:title="新鲜事大图模式"/>-->
     </PreferenceCategory>
     <PreferenceCategory android:title="其他">
-        <!--<Preference android:key="about_app" android:title="关于开发者"/>-->
         <Preference android:key="app_version" android:title="软件版本"/>
     </PreferenceCategory>
 </PreferenceScreen>

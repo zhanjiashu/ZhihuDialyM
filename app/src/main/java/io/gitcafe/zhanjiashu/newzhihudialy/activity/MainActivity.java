@@ -72,6 +72,9 @@ public class MainActivity extends BaseActivity {
         mLeftNavListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                if (position == 0) {
+                    return;
+                }
 
                 int newPosition = position - 1;
                 Fragment fragment;

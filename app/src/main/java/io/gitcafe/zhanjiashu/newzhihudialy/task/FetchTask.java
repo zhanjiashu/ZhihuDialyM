@@ -16,6 +16,7 @@ import java.io.InputStreamReader;
 
 import io.gitcafe.zhanjiashu.newzhihudialy.app.App;
 import io.gitcafe.zhanjiashu.newzhihudialy.util.LogUtil;
+import io.gitcafe.zhanjiashu.newzhihudialy.util.NetworkHelper;
 import io.gitcafe.zhanjiashu.newzhihudialy.util.ZHStorageUtils;
 import io.gitcafe.zhanjiashu.newzhihudialy.util.VolleyUtils;
 
@@ -24,12 +25,12 @@ import io.gitcafe.zhanjiashu.newzhihudialy.util.VolleyUtils;
  */
 public abstract class FetchTask<T> {
     private final String TAG = "FetchTask";
+    private Context mContext;
     private String mUrl;
     private boolean mFetchFromNetworkFirst;
     private boolean mCacheOnDisk;
 
     protected VolleyUtils mVolleyUtils;
-
     protected DiskLruCache mDiskLruCache;
 
     protected String mCacheKey;
@@ -37,6 +38,7 @@ public abstract class FetchTask<T> {
     protected Request mRequest;
 
     public FetchTask(Context context, String url, boolean fetchFromNetworkFirst, boolean cacheOnDisk) {
+        mContext = context;
         mUrl = url;
         mFetchFromNetworkFirst = fetchFromNetworkFirst;
         mCacheOnDisk = cacheOnDisk;
@@ -55,7 +57,7 @@ public abstract class FetchTask<T> {
 
         boolean hasCacheFile = ZHStorageUtils.hasCacheInDisk(mDiskLruCache, cacheKey);
 
-        if (mFetchFromNetworkFirst && App.checkNetwork() || !hasCacheFile) {
+        if (mFetchFromNetworkFirst && NetworkHelper.getInstance(mContext).isNetworkAvailable() || !hasCacheFile) {
             fetchFromNetwork(mUrl, callback);
         } else {
             fetchFromeDiskCache(mCacheKey, callback);
